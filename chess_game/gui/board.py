@@ -17,7 +17,7 @@ class Board():
         self.squares = [RANKS*[0] for file in range(FILES)]
         self._create()
         self._add_piece('white')
-        self._add_piece('white')
+        self._add_piece('black')
 
 
     def _create(self):

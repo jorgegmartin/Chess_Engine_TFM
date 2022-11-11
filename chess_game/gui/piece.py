@@ -11,7 +11,7 @@ class Piece():
         self.set_sprite()
         self.sprite_rect = sprite_rect
     
-    def set_sprite(self, size=100):
+    def set_sprite(self, size=80):
         self.sprite = os.path.join(
             f'resources/imgs/imgs-{size}px/{self.colour}_{self.name}.png')
 
@@ -26,16 +26,16 @@ class Knight(Piece):
 
 class Bishop(Piece):
     def __init__(self, colour):
-        super().__init__('knight', colour, 3.01)
+        super().__init__('bishop', colour, 3.01)
 
 class Rook(Piece):
     def __init__(self, colour):
-        super().__init__('knight', colour, 5.0)
+        super().__init__('rook', colour, 5.0)
 
 class Queen(Piece):
     def __init__(self, colour):
-        super().__init__('knight', colour, 9.0)
+        super().__init__('queen', colour, 9.0)
 
 class King(Piece):
     def __init__(self, colour):
-        super().__init__('knight', colour, 10000)
+        super().__init__('king', colour, 10000)

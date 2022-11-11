@@ -30,8 +30,8 @@ class Game:
                 if self.board.squares[rank][file].has_piece():
                     piece = self.board.squares[rank][file].piece
 
-                    piece.set_sprite(size=80)
+                    #piece.set_sprite(size=80)
                     img = pygame.image.load(piece.sprite)
                     img_center = file * SQSIZE + SQSIZE // 2, rank * SQSIZE + SQSIZE // 2
-                    piece.set_sprite = img.get_rect(center=img_center)
+                    piece.sprite_rect  = img.get_rect(center=img_center)
                     surface.blit(img, piece.sprite_rect)
