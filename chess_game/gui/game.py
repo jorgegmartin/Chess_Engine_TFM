@@ -1,11 +1,13 @@
 import pygame
 from constants import *
 from board import *
+from mouse import Mouse
 
 class Game:
 
     def __init__(self):
         self.board = Board()
+        self.mouse = Mouse()
 
     # SHOW methods
 
@@ -35,3 +37,6 @@ class Game:
                     img_center = file * SQSIZE + SQSIZE // 2, rank * SQSIZE + SQSIZE // 2
                     piece.sprite_rect  = img.get_rect(center=img_center)
                     surface.blit(img, piece.sprite_rect)
+    
+    def show_last_move(self, surface):
+        pass #TODO

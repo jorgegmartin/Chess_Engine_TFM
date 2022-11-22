@@ -4,6 +4,7 @@ import sys
 from constants import *
 from game import Game
 
+
 class Main:
 
     def __init__(self):
@@ -16,14 +17,30 @@ class Main:
 
         game = self.game
         screen = self.screen
+        board = self.game.board
+        mouse = self.game.mouse
 
         while True:
+            # show methods
             game.show_background(screen)
             game.show_pieces(screen)
+            game.show_last_move(screen) ##TODO
 
+            # event checking
             for event in pygame.event.get():
-                #if event.type == pygame.MOUSEBUTTONDOWN:
-                if event.type == pygame.QUIT:
+                # checking for clicks
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                    mouse.update_mouse(event.pos)
+                # checking for movement
+                elif event.type == pygame.MOUSEMOTION:
+                    pass
+                # checking for clicks release
+                elif event.type == pygame.MOUSEBUTTONUP:
+                    pass
+                
+                
+                # quitting
+                elif event.type == pygame.QUIT:
                     pygame.quit()
                     sys.exit()
 
