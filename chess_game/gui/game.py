@@ -1,23 +1,25 @@
 import pygame
+
 from constants import *
 from board import *
 from mouse import Mouse
+from config import Config
 
 class Game:
 
     def __init__(self):
         self.board = Board()
         self.mouse = Mouse()
+        self.config = Config()
 
     # SHOW methods
 
     def show_background(self, surface):
+        theme = self.config.theme
+
         for rank in range(RANKS):
             for file in range(FILES):
-                if (rank + file) % 2 == 0:
-                    colour = (234, 235, 200) # light green
-                else:
-                    colour = (119, 154, 88) # dark green 
+                colour = theme.background.light if (file + rank) % 2 == 0 else theme.background.dark
 
                 rect = (file * SQSIZE, rank * SQSIZE,  SQSIZE, SQSIZE)
 
@@ -39,4 +41,16 @@ class Game:
                     surface.blit(img, piece.sprite_rect)
     
     def show_last_move(self, surface):
-        pass #TODO
+        theme = self.config.theme
+
+        if self.board.last_move:
+            initial = self.board.last_move.initial
+            final = self.board.last_move.final
+
+            for pos in [initial, final]:
+                # color
+                color = theme.trace.light if (pos.rank + pos.file) % 2 == 0 else theme.trace.dark
+                # rect
+                rect = (pos.file * SQSIZE, pos.rank * SQSIZE, SQSIZE, SQSIZE)
+                # blit
+                pygame.draw.rect(surface, color, rect)

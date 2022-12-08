@@ -7,6 +7,7 @@ class Square:
         self.rank = rank
         self.file = file
         self.piece = piece
+        self.highlighted = False
 
     def has_piece(self):
         return self.piece != None
@@ -15,6 +16,7 @@ class Board():
 
     def __init__(self):
         self.squares = [RANKS*[0] for file in range(FILES)]
+        self.last_move = None
         self._create()
         self._add_piece('white')
         self._add_piece('black')

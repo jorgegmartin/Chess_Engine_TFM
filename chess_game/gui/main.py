@@ -28,12 +28,26 @@ class Main:
 
             # event checking
             for event in pygame.event.get():
+
                 # checking for clicks
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     mouse.update_mouse(event.pos)
-                # checking for movement
+
+                    clicked_rank = mouse.mouseY // SQSIZE
+                    clicked_file = mouse.mouseX // SQSIZE
+
+                    # checking if square has piece
+                    if board.squares[clicked_rank][clicked_file].has_piece():
+                        piece = board.squares[clicked_rank][clicked_file].piece
+                        
+                        mouse.save_initial(event.pos)
+                        mouse.pick_piece(piece)
+
+                # checking for movement MAYBE NOT USEFUL!!!!
                 elif event.type == pygame.MOUSEMOTION:
-                    pass
+                    if mouse.picking:
+                        pass #TODO
+
                 # checking for clicks release
                 elif event.type == pygame.MOUSEBUTTONUP:
                     pass
