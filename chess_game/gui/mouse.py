@@ -23,7 +23,7 @@ class Mouse():
         self.piece = piece
         self.picking = True
     
-    def unpick_piece(self, piece):
+    def unpick_piece(self):
         self.piece = None
         self.picking = False
 

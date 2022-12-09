@@ -2,6 +2,8 @@ import pygame
 import sys
 
 from constants import *
+from board import *
+from move import Move
 from game import Game
 
 
@@ -31,22 +33,55 @@ class Main:
 
                 # checking for clicks
                 if event.type == pygame.MOUSEBUTTONDOWN:
-                    mouse.update_mouse(event.pos)
+                    # if piece selected
+                    if mouse.picking:
+                        mouse.update_mouse(event.pos)
 
-                    clicked_rank = mouse.mouseY // SQSIZE
-                    clicked_file = mouse.mouseX // SQSIZE
+                        released_row = mouse.mouseY // SQSIZE
+                        released_col = mouse.mouseX // SQSIZE
 
-                    # checking if square has piece
-                    if board.squares[clicked_rank][clicked_file].has_piece():
-                        piece = board.squares[clicked_rank][clicked_file].piece
-                        
-                        mouse.save_initial(event.pos)
-                        mouse.pick_piece(piece)
+                        # create possible move
+                        initial = Square(mouse.initial_rank, mouse.initial_file)
+                        final = Square(released_row, released_col)
+                        move = Move(initial, final)
+                        print(move)
+
+                        # valid move ?
+                        if board.valid_move(move) == True:
+                            # normal capture
+                            captured = board.squares[released_row][released_col].has_piece()
+                            board.move(mouse.piece, move)                            
+
+                            # sounds
+                            game.play_sound(captured)
+                            # show methods
+                            game.show_background(screen)
+                            game.show_last_move(screen)
+                            game.show_pieces(screen)
+                            # next turn
+                            game.next_turn()
+                    
+                        mouse.unpick_piece()
+
+                    # if piece not selected
+                    elif mouse.picking == False:
+                        mouse.update_mouse(event.pos)
+
+                        clicked_rank = mouse.mouseY // SQSIZE
+                        clicked_file = mouse.mouseX // SQSIZE
+                        print((clicked_rank, clicked_file))
+
+                        # checking if square has piece
+                        if board.squares[clicked_rank][clicked_file].has_piece():
+                            piece = board.squares[clicked_rank][clicked_file].piece
+                            if piece.colour == game.next_player:    
+                                mouse.save_initial(event.pos)
+                                mouse.pick_piece(piece)
+                                print(piece)
 
                 # checking for movement MAYBE NOT USEFUL!!!!
                 elif event.type == pygame.MOUSEMOTION:
-                    if mouse.picking:
-                        pass #TODO
+                    pass
 
                 # checking for clicks release
                 elif event.type == pygame.MOUSEBUTTONUP:

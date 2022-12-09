@@ -21,7 +21,19 @@ class Board():
         self._add_piece('white')
         self._add_piece('black')
 
+    def move(self, piece, move, testing=False):
+        initial = move.initial
+        final = move.final
 
+       # en_passant_empty = self.squares[final.rank][final.file].isempty()
+
+        # console board move update
+        self.squares[initial.rank][initial.file].piece = None
+        self.squares[final.rank][final.file].piece = piece
+    
+    def valid_move(self, move):
+        return True #TODO aqui comprobar los movimientos extraidos del paquete chess.com
+    
     def _create(self):
         for rank in range(RANKS):
             for file in range(FILES):

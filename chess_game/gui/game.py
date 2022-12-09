@@ -8,6 +8,7 @@ from config import Config
 class Game:
 
     def __init__(self):
+        self.next_player = 'white'
         self.board = Board()
         self.mouse = Mouse()
         self.config = Config()
@@ -54,3 +55,15 @@ class Game:
                 rect = (pos.file * SQSIZE, pos.rank * SQSIZE, SQSIZE, SQSIZE)
                 # blit
                 pygame.draw.rect(surface, color, rect)
+
+
+    # other methods
+
+    def next_turn(self):
+        self.next_player = 'white' if self.next_player == 'black' else 'black'
+
+    def play_sound(self, captured=False):
+        if captured:
+            self.config.capture_sound.play()
+        else:
+            self.config.move_sound.play()
