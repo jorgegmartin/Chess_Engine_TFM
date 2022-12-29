@@ -1,5 +1,6 @@
 from constants import *
 from piece import *
+import chess
 
 class Square:
 
@@ -21,6 +22,7 @@ class Board():
         self._add_piece('white')
         self._add_piece('black')
 
+
     def move(self, piece, move, testing=False):
         initial = move.initial
         final = move.final
@@ -31,9 +33,14 @@ class Board():
         self.squares[initial.rank][initial.file].piece = None
         self.squares[final.rank][final.file].piece = piece
     
-    def valid_move(self, move):
-        return True #TODO aqui comprobar los movimientos extraidos del paquete chess.com
-    
+    def valid_move(self, move, current_board):
+        
+        valid_moves = [str(idx) for idx in current_board.legal_moves]
+        print(valid_moves) #CHECKPOINT
+        is_valid = True if move in valid_moves else False
+        print(is_valid) #CHECKPOINT
+        return True if move in valid_moves else False
+
     def _create(self):
         for rank in range(RANKS):
             for file in range(FILES):
