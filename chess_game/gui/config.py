@@ -7,9 +7,9 @@ class Config:
         self.theme = Theme((234, 235, 200), (119, 154, 88), (244, 247, 116), (172, 195, 51), '#C86464', '#C84646')
         self.font = pygame.font.SysFont('monospace', 18, bold=True)
         self.move_sound = Sound(
-            os.path.join('resources/sounds/move.wav'))
+            os.path.join('chess_game/gui/resources/sounds/move.wav'))
         self.capture_sound = Sound(
-            os.path.join('resources/sounds/capture.wav'))
+            os.path.join('chess_game/gui/resources/sounds/capture.wav'))
 
 class Sound:
 

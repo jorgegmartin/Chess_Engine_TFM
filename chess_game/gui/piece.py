@@ -13,7 +13,7 @@ class Piece():
     
     def set_sprite(self, size=80):
         self.sprite = os.path.join(
-            f'resources/imgs/imgs-{size}px/{self.colour}_{self.name}.png')
+            f'chess_game/gui/resources/imgs/imgs-{size}px/{self.colour}_{self.name}.png')
 
 
 class Pawn(Piece):

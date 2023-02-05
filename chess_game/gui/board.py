@@ -16,7 +16,7 @@ class Square:
 class Board():
 
     def __init__(self):
-        self.squares = [RANKS*[0] for file in range(FILES)]
+        self.squares = [FILES*[0] for rank in range(RANKS)]
         self.last_move = None
         self._create()
         self._add_piece('white')
