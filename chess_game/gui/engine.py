@@ -6,6 +6,7 @@ class Engine:
 
     def __init__(self):
         self.engine_model = Model()
+        self.history_table = {}
     
     def square_to_index(square):
         squares_index = {'a': 0,
@@ -73,6 +74,17 @@ class Engine:
         if depth == 0 or board.is_game_over():
             return Engine.minimax_eval(board=board)
         
+        # Check the history table
+        key = str(board)
+        if key in Engine.history_table:
+            value = Engine.history_table[key]
+            if maximizing_player:
+                alpha = max(alpha, value)
+            else:
+                beta = min(beta, value)
+            if beta <= alpha:
+                return value
+        
         if maximizing_player:
             max_eval = -np.inf
             for move in board.legal_moves:
@@ -83,6 +95,7 @@ class Engine:
                 alpha = max(alpha, eval)
                 if beta <= alpha:
                     break
+            Engine.history_table[key] = max_eval
             return max_eval
         else:
             min_eval = np.inf
@@ -94,19 +107,24 @@ class Engine:
                 beta = min(beta, eval)
                 if beta <= alpha:
                     break
-                return min_eval
+            Engine.history_table[key] = min_eval
+            return min_eval
 
 
     # this is the actual function that gets the move from the neural network
     def get_ai_move(self, eval_board, depth):
+        # possible_moves = board.legal_moves
+        # if(len(possible_moves) == 0):
+        #     print("No more possible moves...Game Over")
+
         max_move = None
-        max_eval = -np.inf
+        max_eval = np.inf
         board = eval_board
         for move in board.legal_moves:
             board.push(move)
             eval = Engine.minimax(board, depth - 1, -np.inf, np.inf, False)
             board.pop()
-            if eval > max_eval:
+            if eval < max_eval:
                 max_eval = eval
                 max_move = move
         

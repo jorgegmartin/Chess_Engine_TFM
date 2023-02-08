@@ -1,3 +1,4 @@
+----
 # Development of a chess engine using Neural Networks and python
 ----
 ## Goal
@@ -28,4 +29,17 @@ All the necessary packages for this project can be found in the requrements.txt 
 
 
 ## Folder structure
-A repository for the Master in DataScience Thesis
+
+data/
+
+sample/
+
+random_generated/
+
+chess_game
+
+engine/
+
+engine_models/
+
+stockfish/

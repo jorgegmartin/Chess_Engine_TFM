@@ -23,15 +23,32 @@ class Board():
         self._add_piece('black')
 
 
-    def move(self, piece, move, testing=False):
+    def move(self, piece, move, enpassant=False, promotion=False, kingcastling=False, queencastling=False, piece_colour='white'):
         initial = move.initial
         final = move.final
 
-       # en_passant_empty = self.squares[final.rank][final.file].isempty()
-
-        # console board move update
-        self.squares[initial.rank][initial.file].piece = None
-        self.squares[final.rank][final.file].piece = piece
+        if enpassant==True:
+            self.squares[initial.rank][final.file].piece = None
+        if promotion==True:
+            self.squares[initial.rank][initial.file].piece = None
+            self.squares[final.rank][final.file].piece = Queen(piece_colour)
+        if kingcastling==True:
+            # king move
+            self.squares[initial.rank][initial.file].piece = None
+            self.squares[final.rank][final.file].piece = piece
+            # rook move
+            self.squares[final.rank][final.file+1].piece = None
+            self.squares[final.rank][final.file-1].piece = Rook(piece_colour)
+        if queencastling==True:
+            # king move
+            self.squares[initial.rank][initial.file].piece = None
+            self.squares[final.rank][final.file].piece = piece
+            # rook move
+            self.squares[final.rank][final.file-2].piece = None
+            self.squares[final.rank][final.file+1].piece = Rook(piece_colour)
+        elif promotion==False:
+            self.squares[initial.rank][initial.file].piece = None
+            self.squares[final.rank][final.file].piece = piece
     
     def valid_move(self, move, current_board):
         

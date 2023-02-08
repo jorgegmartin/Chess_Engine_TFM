@@ -19,7 +19,6 @@ class Main:
         pygame.display.set_caption('Chess')
         self.game = Game()
         self.engine = Engine()
-        #self.current_player = self.game.next_player
 
     def mainloop(self):
 
@@ -28,9 +27,9 @@ class Main:
         board = self.game.board
         mouse = self.game.mouse
         current_board = self.current_board
-        # current_player = self.game.next_player
         calculating_param = 0
         engine = self.engine
+        promotion = 0
 
         while True:
             # show methods
@@ -46,31 +45,56 @@ class Main:
                 game.show_last_move(screen)
                 if calculating_param == 0:
                     calculating_param = 1
-                    print('motor encendido')
                     move_ai = engine.get_ai_move(current_board, 1) 
-                    print(move_ai)
 
                     # create possible move
                     initial = Square(7-chess.square_rank(move_ai.from_square), chess.square_file(move_ai.from_square))
                     final = Square(7-chess.square_rank(move_ai.to_square), chess.square_file(move_ai.to_square))
-                    test_move = Move(initial, final)
-                    print(test_move)
+                    selected_move = Move(initial, final)
+                    print(selected_move)
 
                     # normal capture
-                    print('initial rank', initial.rank)
-                    print('initial file', initial.file)
-                    print('final rank', final.rank)
-                    print('final file', final.file)                        
-                    print('initial piece', initial.has_piece())
-                    print('final piece', final.has_piece())
-                    print('initial?', board.squares[initial.rank][initial.file].has_piece())
-
                     black_piece = board.squares[initial.rank][initial.file].piece
+                    string_move_ai = str(move_ai)
+                    print(string_move_ai)
+                    print(string_move_ai[3]=='1')
+                    print((board.squares[initial.rank][initial.file].piece.name == 'pawn'))
+                    if (string_move_ai[3]=='1') and (board.squares[initial.rank][initial.file].piece.name == 'pawn'):
+                        promotion = 1
+                    # special moves:
+                    if current_board.is_en_passant(chess.Move.from_uci(string_move_ai)):
+                        # update gui
+                        board.move(black_piece, selected_move, enpassant=True)
+
+                    # check castle
+                    elif current_board.is_castling(chess.Move.from_uci(string_move_ai)):
+                        if current_board.is_kingside_castling(chess.Move.from_uci(string_move_ai)):
+                            # update gui
+                            board.move(black_piece, selected_move, kingcastling=True, piece_colour='black')
+                        
+                        elif current_board.is_queenside_castling(chess.Move.from_uci(string_move_ai)):
+                            # update gui
+                            board.move(black_piece, selected_move, queencastling=True, piece_colour='black')
+                        
+                        # normal capture
+
+                                
+                    # check promotion
+                    elif promotion==1:
+                        board.move(black_piece, selected_move, promotion=True, piece_colour='black')
+                        promotion=0 
+                        # normal capture
+
+                    
+                    # normal move
+                    else:
+                        board.move(black_piece, selected_move)
+                        
+                    
                     captured = board.squares[final.rank][final.file].has_piece()
-                    board.move(black_piece, test_move)                            
 
                     # engine.square_to_index(move_ai))
-                    current_board.push_uci(str(move_ai))
+                    current_board.push_uci(string_move_ai)
 
 
                     # sounds
@@ -91,11 +115,8 @@ class Main:
                 if current_player == 'black':
                     pass
                 
-                
                 elif current_player == 'white':
                     # event checking
-                
-
                     # checking for clicks
                     if event.type == pygame.MOUSEBUTTONDOWN:
                         # if piece selected
@@ -110,20 +131,49 @@ class Main:
                             final = Square(released_rank, released_file)
                             move = Move(initial, final)
                             print(move) #CHECKPOINT
-                            
+                            string_move = str(move)
 
-                            # valid move ?
-                            if board.valid_move(str(move), current_board):
+                            if (string_move[3]=='8') and (board.squares[initial.rank][initial.file].piece.name == 'pawn'):
+                                promotion = 1
+                                string_move = string_move+'q'
+
+                            # check if valid move
+                            if board.valid_move(string_move, current_board):
                                 # check en passant capture
-                                if current_board.is_en_passant(chess.Move.from_uci(str(move))):
-                                    print("EN PASSANT!") #TODO capturar el peon capturado al paso (eliminar piece y sprite)
+                                if current_board.is_en_passant(chess.Move.from_uci(string_move)):
+                                    captured_square = board.squares[initial.rank][final.file]
+                                    # normal capture
+                                    captured = captured_square.has_piece()
+                                    # update gui
+                                    board.move(mouse.piece, move, enpassant=True)
 
+                                # check castle
+                                elif current_board.is_castling(chess.Move.from_uci(string_move)):
+                                    if current_board.is_kingside_castling(chess.Move.from_uci(string_move)):
+                                        # update gui
+                                        board.move(mouse.piece, move, kingcastling=True)
+                                        
+                                    elif current_board.is_queenside_castling(chess.Move.from_uci(string_move)):
+                                        # update gui
+                                        board.move(mouse.piece, move, queencastling=True)
+
+                                    # normal capture
+                                    captured = board.squares[released_rank][released_file].has_piece()
+                                
+                                # check promotion
+                                elif promotion==1:
+                                    board.move(mouse.piece, move, promotion=True)
+                                    promotion=0 
+                                    # normal capture
+                                    captured = board.squares[released_rank][released_file].has_piece()
+                                
+                                # normal move
+                                else:
+                                    board.move(mouse.piece, move) 
+                                    captured = board.squares[released_rank][released_file].has_piece()                           
+                                
                                 # push move to board
-                                current_board.push_uci(str(move))
-
-                                # normal capture
-                                captured = board.squares[released_rank][released_file].has_piece()
-                                board.move(mouse.piece, move)                            
+                                current_board.push_uci(string_move)    
 
                                 # sounds
                                 game.play_sound(captured)
@@ -157,14 +207,6 @@ class Main:
                                     mouse.save_initial(event.pos)
                                     mouse.pick_piece(piece)
                                     print(piece) #CHECKPOINT
-
-                    # checking for movement MAYBE NOT USEFUL!!!!
-                    elif event.type == pygame.MOUSEMOTION:
-                        pass
-
-                    # checking for clicks release
-                    elif event.type == pygame.MOUSEBUTTONUP:
-                        pass
                     
                     
                     # quitting
