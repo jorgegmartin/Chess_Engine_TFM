@@ -3,7 +3,6 @@ asttokens==2.2.1
 astunparse==1.6.3
 backcall==0.2.0
 cachetools==5.2.1
-certifi @ file:///C:/b/abs_85o_6fm0se/croot/certifi_1671487778835/work/certifi
 charset-normalizer==2.1.1
 chess==1.9.4
 colorama==0.4.6

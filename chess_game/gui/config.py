@@ -20,7 +20,7 @@ class Sound:
     def play(self):
         pygame.mixer.Sound.play(self.sound)
 
-class Color:
+class Colour:
 
     def __init__(self, light, dark):
         self.light = light
@@ -32,6 +32,6 @@ class Theme:
                        light_trace, dark_trace,
                        light_moves, dark_moves):
         
-        self.background = Color(light_background, dark_background)
-        self.trace = Color(light_trace, dark_trace)
-        self.moves = Color(light_moves, dark_moves)
+        self.background = Colour(light_background, dark_background)
+        self.trace = Colour(light_trace, dark_trace)
+        self.moves = Colour(light_moves, dark_moves)
