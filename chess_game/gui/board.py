@@ -13,7 +13,7 @@ class Square:
     def has_piece(self):
         return self.piece != None
 
-class Board():
+class Board:
 
     def __init__(self):
         self.squares = [FILES*[0] for rank in range(RANKS)]

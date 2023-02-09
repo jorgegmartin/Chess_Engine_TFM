@@ -1,12 +1,12 @@
 import pygame
 import sys
+import chess
+import chess.engine
 
 from constants import *
 from board import *
 from move import Move
 from game import Game
-import chess
-import chess.engine
 from engine import Engine
 
 
@@ -39,7 +39,7 @@ class Main:
             
             current_player = self.game.next_player
 
-            if current_player == 'black':
+            while current_player == 'black':
                 game.show_background(screen)
                 game.show_pieces(screen)
                 game.show_last_move(screen)
@@ -51,14 +51,12 @@ class Main:
                     initial = Square(7-chess.square_rank(move_ai.from_square), chess.square_file(move_ai.from_square))
                     final = Square(7-chess.square_rank(move_ai.to_square), chess.square_file(move_ai.to_square))
                     selected_move = Move(initial, final)
-                    print(selected_move)
+                    print(selected_move) # CHECKPOINT
 
                     # normal capture
                     black_piece = board.squares[initial.rank][initial.file].piece
                     string_move_ai = str(move_ai)
-                    print(string_move_ai)
-                    print(string_move_ai[3]=='1')
-                    print((board.squares[initial.rank][initial.file].piece.name == 'pawn'))
+
                     if (string_move_ai[3]=='1') and (board.squares[initial.rank][initial.file].piece.name == 'pawn'):
                         promotion = 1
                     # special moves:
@@ -107,7 +105,6 @@ class Main:
                     game.next_turn()
 
                     current_player = self.game.next_player
-                    print(current_player)
                     calculating_param = 0
                 
 
@@ -184,7 +181,6 @@ class Main:
                                 # next turn
                                 game.next_turn()
                                 current_player = self.game.next_player
-                                print(current_player)
 
                             
                             else:
