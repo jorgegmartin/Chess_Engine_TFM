@@ -4,10 +4,15 @@ from model import Model
 
 class Engine:
 
-    def __init__(self):
-        self.engine_model = Model()
+    def __init__(self, engine_difficulty='easy'):
+        self.engine_difficulty = engine_difficulty
+        self.engine_model = Model(self.engine_difficulty)
         self.history_table = {}
     
+    def load_model(self):
+        test_model = self.engine_model
+        return test_model.model
+
     def square_to_index(square):
         squares_index = {'a': 0,
                         'b': 1,
@@ -48,8 +53,7 @@ class Engine:
                 idx = np.unravel_index(square, (8, 8))
                 board3d[piece + 5][7 - idx[0]][idx[1]] = 1
 
-        # add attacks and valid moves too
-        # so the network knows what is being attacked
+        # add attacks and valid moves
         aux = board.turn
         board.turn = chess.WHITE
         for move in board.legal_moves:
@@ -63,16 +67,17 @@ class Engine:
 
         return board3d
 
-    def minimax_eval(board):
-        tf_model = Model().model
+    def minimax_eval(board, difficulty):
+        test_model = Engine(difficulty)
+        tf_model = test_model.load_model()
         board3d = Engine.split_dims(board=board)
         board3d = np.expand_dims(board3d, 0)
         return tf_model.predict(board3d)[0][0]
 
 
-    def minimax(board, depth, alpha, beta, maximizing_player):
+    def minimax(board, depth, alpha, beta, maximizing_player, difficulty):
         if depth == 0 or board.is_game_over():
-            return Engine.minimax_eval(board=board)
+            return Engine.minimax_eval(board=board, difficulty=difficulty)
         
         # Check the history table
         key = str(board)
@@ -89,7 +94,7 @@ class Engine:
             max_eval = -np.inf
             for move in board.legal_moves:
                 board.push(move)
-                eval = Engine.minimax(board, depth - 1, alpha, beta, False)
+                eval = Engine.minimax(board, depth - 1, alpha, beta, False, difficulty)
                 board.pop()
                 max_eval = max(max_eval, eval)
                 alpha = max(alpha, eval)
@@ -101,7 +106,7 @@ class Engine:
             min_eval = np.inf
             for move in board.legal_moves:
                 board.push(move)
-                eval = Engine.minimax(board, depth - 1, alpha, beta, True)
+                eval = Engine.minimax(board, depth - 1, alpha, beta, True, difficulty)
                 board.pop()
                 min_eval = min(min_eval, eval)
                 beta = min(beta, eval)
@@ -112,17 +117,13 @@ class Engine:
 
 
     # this is the actual function that gets the move from the neural network
-    def get_ai_move(self, eval_board, depth):
-        # possible_moves = board.legal_moves
-        # if(len(possible_moves) == 0):
-        #     print("No more possible moves...Game Over")
-
+    def get_ai_move(self, eval_board, depth, difficulty):
         max_move = None
         max_eval = np.inf
         board = eval_board
         for move in board.legal_moves:
             board.push(move)
-            eval = Engine.minimax(board, depth - 1, -np.inf, np.inf, False)
+            eval = Engine.minimax(board, depth - 1, -np.inf, np.inf, False, difficulty)
             board.pop()
             if eval < max_eval:
                 max_eval = eval

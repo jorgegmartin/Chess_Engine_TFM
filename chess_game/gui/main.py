@@ -13,12 +13,76 @@ from engine import Engine
 class Main:
 
     def __init__(self):
+
+        def select_difficulty():
+            pygame.init()
+            screen = pygame.display.set_mode((900, 600))
+            background_img = pygame.image.load('chess_game/gui/resources/imgs/chess_background.jpeg')
+            button3 = pygame.Rect(50, 60, 200, 50)
+            button6 = pygame.Rect(50, 160, 200, 50)
+            button10 = pygame.Rect(50, 260, 200, 50)
+            button10re = pygame.Rect(50, 360, 200, 50)
+
+            while True:
+                for event in pygame.event.get():
+                    if event.type == pygame.QUIT:
+                        pygame.quit()
+                        sys.exit()
+                    if event.type == pygame.MOUSEBUTTONUP:
+                        if button3.collidepoint(event.pos):
+                            depth = 'easy'
+                            print(depth)
+                            return depth
+                        if button6.collidepoint(event.pos):
+                            depth = 'medium'
+                            print(depth)
+                            return depth
+                        if button10.collidepoint(event.pos):
+                            depth = 'hard'
+                            print(depth)
+                            return depth
+                        if button10re.collidepoint(event.pos):
+                            depth = 'extreme'
+                            print(depth)
+                            return depth
+                screen.fill((0, 0, 0))
+                screen.blit(background_img, (0, 0))
+                pygame.display.set_caption('Chess')
+                pygame.draw.rect(screen, (0, 200, 0), button3, border_radius=10)
+                pygame.draw.rect(screen, (250, 250, 0), button6,  border_radius=10)
+                pygame.draw.rect(screen, (255, 128, 50), button10,  border_radius=10)
+                pygame.draw.rect(screen, (200, 0, 0), button10re,  border_radius=10)
+                
+                pygame.draw.rect(screen, (0, 150, 0), button3, width=5, border_radius=10)
+                pygame.draw.rect(screen, (200, 200, 0), button6, width=5,  border_radius=10)
+                pygame.draw.rect(screen, (205, 98, 20), button10, width=5,  border_radius=10)
+                pygame.draw.rect(screen, (100, 0, 0), button10re, width=5,  border_radius=10)
+                
+                font = pygame.font.Font(None, 36)
+                depth3_text = font.render("Easy", True, (0, 0, 0))
+                depth6_text = font.render("Medium", True, (0, 0, 0))
+                depth10_text = font.render("Hard", True, (0, 0, 0))
+                depth10re_text = font.render("Extreme", True, (0, 0, 0))
+                select_difficulty = font.render("SELECT DIFFICULTY", True, (255, 255, 255))
+                watermark_font = pygame.font.Font(None, 14)
+                watermark_text = watermark_font.render("Powered by KSCHOOL. 2023", True, (56, 56, 56))
+
+                screen.blit(depth3_text, (100, 75))
+                screen.blit(depth6_text, (100, 175))
+                screen.blit(depth10_text, (100, 275))
+                screen.blit(depth10re_text, (100, 375))
+                screen.blit(select_difficulty, (50, 25))
+                screen.blit(watermark_text, (750, 35))
+
+                pygame.display.update()
+
         pygame.init()
+        self.engine_difficulty = select_difficulty()
         self.current_board = chess.Board()
         self.screen = pygame.display.set_mode( (WIDTH, HEIGHT) )
         pygame.display.set_caption('Chess')
         self.game = Game()
-        self.engine = Engine()
+        self.engine = Engine(self.engine_difficulty)
 
     def mainloop(self):
 
@@ -30,22 +94,28 @@ class Main:
         calculating_param = 0
         engine = self.engine
         promotion = 0
+        
+        # selecting the difficulty of the game's engine
+        game_depth = 1
+        engine_difficulty = self.engine_difficulty
 
         while True:
             # show methods
             game.show_background(screen)
-            game.show_pieces(screen)
             game.show_last_move(screen)
+            game.show_highlighted(screen)
+            game.show_pieces(screen)
             
             current_player = self.game.next_player
 
             while current_player == 'black':
                 game.show_background(screen)
-                game.show_pieces(screen)
                 game.show_last_move(screen)
+                game.show_pieces(screen)
+
                 if calculating_param == 0:
                     calculating_param = 1
-                    move_ai = engine.get_ai_move(current_board, 1) 
+                    move_ai = engine.get_ai_move(current_board, game_depth, engine_difficulty) 
 
                     # create possible move
                     initial = Square(7-chess.square_rank(move_ai.from_square), chess.square_file(move_ai.from_square))
@@ -203,7 +273,12 @@ class Main:
                                     mouse.save_initial(event.pos)
                                     mouse.pick_piece(piece)
                                     print(piece) #CHECKPOINT
-                    
+
+                            
+                            game.show_background(screen)
+                            game.show_last_move(screen)
+                            game.show_highlighted(screen)
+                            game.show_pieces(screen)
                     
                     # quitting
                     elif event.type == pygame.QUIT:

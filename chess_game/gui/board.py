@@ -8,7 +8,6 @@ class Square:
         self.rank = rank
         self.file = file
         self.piece = piece
-        self.highlighted = False
 
     def has_piece(self):
         return self.piece != None
@@ -49,13 +48,13 @@ class Board:
         elif promotion==False:
             self.squares[initial.rank][initial.file].piece = None
             self.squares[final.rank][final.file].piece = piece
-    
+        
+        self.last_move = move
+
     def valid_move(self, move, current_board):
         
         valid_moves = [str(idx) for idx in current_board.legal_moves]
         print(valid_moves) #CHECKPOINT
-        is_valid = True if move in valid_moves else False
-        print(is_valid) #CHECKPOINT
         return True if move in valid_moves else False
 
     def _create(self):

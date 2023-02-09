@@ -50,11 +50,22 @@ class Game:
 
             for pos in [initial, final]:
                 # color
-                color = theme.trace.light if (pos.rank + pos.file) % 2 == 0 else theme.trace.dark
+                colour = theme.trace.light if (pos.rank + pos.file) % 2 == 0 else theme.trace.dark
                 # rect
                 rect = (pos.file * SQSIZE, pos.rank * SQSIZE, SQSIZE, SQSIZE)
                 # blit
-                pygame.draw.rect(surface, color, rect)
+                pygame.draw.rect(surface, colour, rect)
+
+    def show_highlighted(self, surface):
+        theme = self.config.theme
+
+        if self.mouse.picking:
+            clicked_rank = self.mouse.mouseY // SQSIZE
+            clicked_file = self.mouse.mouseX // SQSIZE
+            colour = theme.moves.light if (clicked_rank + clicked_file) % 2 == 0 else theme.moves.dark
+            rect = (clicked_file * SQSIZE, clicked_rank * SQSIZE, SQSIZE, SQSIZE)
+            # blit
+            pygame.draw.rect(surface, colour, rect)
 
 
     # other methods
