@@ -18,6 +18,8 @@ class Main:
             pygame.init()
             screen = pygame.display.set_mode((900, 600))
             background_img = pygame.image.load('chess_game/gui/resources/imgs/chess_background.jpeg')
+            icon_img = pygame.image.load('chess_game/gui/resources/imgs/icon.png')
+            pygame.display.set_icon(icon_img)
             button3 = pygame.Rect(50, 60, 200, 50)
             button6 = pygame.Rect(50, 160, 200, 50)
             button10 = pygame.Rect(50, 260, 200, 50)
