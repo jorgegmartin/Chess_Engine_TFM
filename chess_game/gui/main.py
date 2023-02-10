@@ -121,7 +121,6 @@ class Main:
                     initial = Square(7-chess.square_rank(move_ai.from_square), chess.square_file(move_ai.from_square))
                     final = Square(7-chess.square_rank(move_ai.to_square), chess.square_file(move_ai.to_square))
                     selected_move = Move(initial, final)
-                    print(selected_move) # CHECKPOINT
 
                     # normal capture
                     black_piece = board.squares[initial.rank][initial.file].piece
@@ -133,6 +132,7 @@ class Main:
                     if current_board.is_en_passant(chess.Move.from_uci(string_move_ai)):
                         # update gui
                         board.move(black_piece, selected_move, enpassant=True)
+                        captured = True
 
                     # check castle
                     elif current_board.is_castling(chess.Move.from_uci(string_move_ai)):
@@ -143,12 +143,12 @@ class Main:
                         elif current_board.is_queenside_castling(chess.Move.from_uci(string_move_ai)):
                             # update gui
                             board.move(black_piece, selected_move, queencastling=True, piece_colour='black')
-                        
-                        # normal capture
+                        captured = False
 
                                 
                     # check promotion
                     elif promotion==1:
+                        captured = board.squares[final.rank][final.file].has_piece()
                         board.move(black_piece, selected_move, promotion=True, piece_colour='black')
                         promotion=0 
                         # normal capture
@@ -156,10 +156,8 @@ class Main:
                     
                     # normal move
                     else:
+                        captured = board.squares[final.rank][final.file].has_piece()
                         board.move(black_piece, selected_move)
-                        
-                    
-                    captured = board.squares[final.rank][final.file].has_piece()
 
                     # engine.square_to_index(move_ai))
                     current_board.push_uci(string_move_ai)
@@ -197,7 +195,6 @@ class Main:
                             initial = Square(mouse.initial_rank, mouse.initial_file)
                             final = Square(released_rank, released_file)
                             move = Move(initial, final)
-                            print(move) #CHECKPOINT
                             string_move = str(move)
 
                             if (string_move[3]=='8') and (board.squares[initial.rank][initial.file].piece.name == 'pawn'):
@@ -208,9 +205,8 @@ class Main:
                             if board.valid_move(string_move, current_board):
                                 # check en passant capture
                                 if current_board.is_en_passant(chess.Move.from_uci(string_move)):
-                                    captured_square = board.squares[initial.rank][final.file]
                                     # normal capture
-                                    captured = captured_square.has_piece()
+                                    captured = True
                                     # update gui
                                     board.move(mouse.piece, move, enpassant=True)
 
@@ -224,20 +220,21 @@ class Main:
                                         # update gui
                                         board.move(mouse.piece, move, queencastling=True)
 
-                                    # normal capture
-                                    captured = board.squares[released_rank][released_file].has_piece()
+                                    captured = False
                                 
                                 # check promotion
                                 elif promotion==1:
-                                    board.move(mouse.piece, move, promotion=True)
-                                    promotion=0 
                                     # normal capture
                                     captured = board.squares[released_rank][released_file].has_piece()
+                                    # move
+                                    board.move(mouse.piece, move, promotion=True)
+                                    promotion=0 
+
                                 
                                 # normal move
                                 else:
-                                    board.move(mouse.piece, move) 
-                                    captured = board.squares[released_rank][released_file].has_piece()                           
+                                    captured = board.squares[released_rank][released_file].has_piece() 
+                                    board.move(mouse.piece, move)                           
                                 
                                 # push move to board
                                 current_board.push_uci(string_move)    
@@ -264,7 +261,6 @@ class Main:
 
                             clicked_rank = mouse.mouseY // SQSIZE
                             clicked_file = mouse.mouseX // SQSIZE
-                            print((clicked_rank, clicked_file)) #CHECKPOINT
 
                             # checking if square has piece
                             if board.squares[clicked_rank][clicked_file].has_piece():
@@ -272,7 +268,6 @@ class Main:
                                 if piece.colour == game.next_player:    
                                     mouse.save_initial(event.pos)
                                     mouse.pick_piece(piece)
-                                    print(piece) #CHECKPOINT
 
                             
                             game.show_background(screen)
