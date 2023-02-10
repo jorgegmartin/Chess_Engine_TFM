@@ -16,7 +16,8 @@ In order to reproduce this project it is necessary to carry out the following st
 1. Have the Conda package manager installed.
 
 2. Download the source data from the following Google Drive folder, and unzip in the working directory.
-_google drive link_
+[Google Drive Folder](https://drive.google.com/drive/folders/1BqMbSNLU4oHjczOV1TDyLJ--YBq4hAtB?usp=share_link)
+
 
 3. Install the necessary environment or use the requirements list found in this repository. (chess_env.yml or requirements.txt)
 
