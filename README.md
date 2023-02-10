@@ -63,3 +63,9 @@ engine/engine_models/:
 
 engine/stockfish/:
    - stores stockfish exe file. Not on github since this data is too big. Can be found on Google Drive.
+
+## Game examples
+
+![Alt text](documentation/initial_screen.png?raw=true "Initial Screen")
+
+![Alt text](documentation/game_screen.png?raw=true "Game Screen")
