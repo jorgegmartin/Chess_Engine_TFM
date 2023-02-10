@@ -1,6 +1,7 @@
-----
+
 # Development of a chess engine using Neural Networks and python
-----
+
+Porject report can be found in documentation.
 
 ## Goal
 
@@ -11,18 +12,18 @@ All the notebooks have been written using python as only programming language.
 
 ## Tools
 
-In order to reproduce this project it is necessary to carry out the following steps:
+In order to reproduce this project it is necessary:
 
-1. Have the Conda package manager installed.
+1. Have the Anaconda installed.
 
-2. Download the source data from the following Google Drive folder, and unzip in the working directory.
-[Google Drive Folder](https://drive.google.com/drive/folders/1BqMbSNLU4oHjczOV1TDyLJ--YBq4hAtB?usp=share_link)
+2. Download the source data from the following Google Drive folder, and unzip in the working directory. Instructions can be found in the file data_instructions.txt stored in the same folder.
+
+[Google Drive Folder](https://drive.google.com/drive/folders/1LQAxLnofnxaBBN1oZ4iMLpAOTMoHJ6qe?usp=share_link)
 
 
 3. Install the necessary environment or use the requirements list found in this repository. (chess_env.yml or requirements.txt)
 
-4. Open the project report (memoria.pdf), and follow along the steps.
-It should yield the same results as found in the git repository. 
+4. Open the project report (memoria.pdf) and read carefully. Advanced intructions can be found in the first chapter. "Instrucciones de uso" 
 
 
 ## Technical Information
@@ -42,6 +43,9 @@ chess_game/gui:
 data/:
    - stores the notebooks that explore and process the data.
 
+data/raw_lichess_db/:
+   - stores the data downloaded from lichess.org. Not on github since this data is too big. Can be found on Google Drive. 
+
 data/random_generated/:
    - stores the data generated for the project. Not on github since this data is too big. Can be found on Google Drive. 
 
@@ -59,16 +63,3 @@ engine/engine_models/:
 
 engine/stockfish/:
    - stores stockfish exe file. Not on github since this data is too big. Can be found on Google Drive.
-
-
-## Game User Instructions
-
-In order to play you must have installed all the tools necessary for the execution.
-
-1. Open a command prompt terminal.
-
-2. Go to the current directory of the project. For example: C:Users\MagnusCarlsen\Desktop\Best_Chess_Engine_TFM
-
-3. Using python, execute main.py. For example: python c:/Users/MagnusCarlsen/Desktop/Best_Chess_Engine_TFM/chess_game/gui/main.py
-
-4. Enjoy.
